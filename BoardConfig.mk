@@ -43,9 +43,6 @@ AB_OTA_PARTITIONS += \
     vendor \
     product
 
-# Virtual A/B
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
-
 # SDK
 BOARD_SYSTEMSDK_VERSIONS := 31
 
