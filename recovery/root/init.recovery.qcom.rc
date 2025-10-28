@@ -35,15 +35,9 @@ on early-init
 
 on init
     write /sys/class/backlight/panel0-backlight/brightness 200
-    setprop sys.usb.configfs 1
+    start boot-hal-1-2
 
-on property:ro.boot.usbcontroller=*
-    setprop sys.usb.controller ${ro.boot.usbcontroller}
-    wait /sys/bus/platform/devices/${ro.boot.usb.dwc3_msm:-a600000.ssusb}/mode
-    write /sys/bus/platform/devices/${ro.boot.usb.dwc3_msm:-a600000.ssusb}/mode peripheral
-    wait /sys/class/udc/${ro.boot.usbcontroller} 1
-
-on fs
+on fS
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
@@ -55,3 +49,37 @@ on fs
     write /sys/kernel/boot_adsp/ssr 1
     wait /sys/class/power_supply/battery
 # END Recovery_StabilityEnhance
+    chmod 0660 /dev/qseecom
+    chown system drmrpc /dev/qseecom
+    chmod 0664 /dev/ion
+    chown system system /dev/ion
+	mkdir /mnt/vendor 0775 shell system
+    mkdir /mnt/vendor/persist 0775 shell system
+    install_keyring
+
+on boot
+    setprop sys.usb.config adb
+    start overrideprops
+
+on property:twrp.modules.loaded=true
+    # Mount firmware
+    mkdir /firmware
+    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro
+    # Load ADSP firmware for PMIC
+    wait /sys/kernel/boot_adsp/boot
+    write /sys/kernel/boot_adsp/boot 1
+    wait /sys/class/power_supply/battery
+    start vendor.health-default
+    start health-hal-2-1
+	start vendor.qseecomd
+    start touch_report
+	start vendor.qseecomd
+    start touch_report
+    umount /firmware
+
+service postrecoveryboot /system/bin/postrecoveryboot.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
