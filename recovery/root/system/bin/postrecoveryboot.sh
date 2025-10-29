@@ -5,5 +5,6 @@
 #
 insmod /vendor/lib/modules/1.1/xiaomi_touch.ko
 insmod /vendor/lib/modules/1.1/nt38771_touch.ko
+insmod /vendor/lib/modules/1.1/speed_touch.ko
 exit 0
 #
