@@ -25,17 +25,14 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-on early-init
-    insmod /vendor/lib/modules/q6_pdr_dlkm.ko
-    insmod /vendor/lib/modules/q6_notifier_dlkm.ko
-    insmod /vendor/lib/modules/snd_event_dlkm.ko
-    insmod /vendor/lib/modules/gpr_dlkm.ko
-    insmod /vendor/lib/modules/spf_core_dlkm.ko
-    insmod /vendor/lib/modules/adsp_loader_dlkm.ko
 
 on init
     write /sys/class/backlight/panel0-backlight/brightness 200
     start boot-hal-1-2
+    mkdir /tmp/install
+    mkdir /tmp/install/bin
+    chmod 0777 /system/bin/postrecoveryboot.sh
+    start postrecoveryboot
 
 on fS
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
@@ -59,9 +56,11 @@ on fS
 
 on boot
     setprop sys.usb.config adb
-    start overrideprops
 
 on property:twrp.modules.loaded=true
+    # Mount persist
+    mkdir /mnt/vendor/persist
+    mount ext4 /dev/block/bootdevice/by-name/persist /mnt/vendor/persist ro
     # Mount firmware
     mkdir /firmware
     mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro
@@ -71,10 +70,6 @@ on property:twrp.modules.loaded=true
     wait /sys/class/power_supply/battery
     start vendor.health-default
     start health-hal-2-1
-	start vendor.qseecomd
-    start touch_report
-	start vendor.qseecomd
-    start touch_report
     umount /firmware
 
 service postrecoveryboot /system/bin/postrecoveryboot.sh
