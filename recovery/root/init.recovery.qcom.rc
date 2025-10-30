@@ -27,12 +27,9 @@
 #
 
 on init
-    write /sys/class/backlight/panel0-backlight/brightness 200
     start boot-hal-1-2
     mkdir /tmp/install
     mkdir /tmp/install/bin
-    chmod 0777 /system/bin/postrecoveryboot.sh
-    start postrecoveryboot
 
 on fS
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
@@ -71,10 +68,3 @@ on property:twrp.modules.loaded=true
     start vendor.health-default
     start health-hal-2-1
     umount /firmware
-
-service postrecoveryboot /system/bin/postrecoveryboot.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0
