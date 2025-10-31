@@ -50,7 +50,7 @@ PRODUCT_PACKAGES += android.hardware.fastboot@1.1-impl-mock
     #qcom_decrypt \
     #qcom_decrypt_fbe
 
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*.ko,$(DEVICE_PATH)/modules,$(TARGET_COPY_OUT_RECOVERY)/root/vendor/lib/modules/1.1)
+#PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*.ko,$(DEVICE_PATH)/modules,$(TARGET_COPY_OUT_RECOVERY)/root/vendor/lib/modules/1.1)
 
 # Recovery
 TARGET_RECOVERY_DEVICE_MODULES += \

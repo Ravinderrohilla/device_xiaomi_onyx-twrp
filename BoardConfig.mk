@@ -170,11 +170,12 @@ TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_NO_FLASH_CURRENT_TWRP := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_LOAD_VENDOR_MODULES_EXCLUDE_GKI := true
-TW_LOAD_VENDOR_MODULES := *
+TW_LOAD_VENDOR_MODULES := "adsp_loader_dlkm.ko rproc_qcom_common.ko q6_dlkm.ko qcom_q6v5.ko qcom_q6v5_pas.ko qcom_esoc.ko qcom_sysmon.ko goodix_core.ko goodix_fod.ko goodix_health.ko goodix_3626.ko focaltech_fts.ko focaltech_touch.ko fts_touch_spi.ko aw882xx_dlkm.ko leds-qpnp-vibrator-ldo.ko qcom-hv-haptics.ko qti_battery_charger.ko xiaomi_touch.ko hwmon.ko synaptics_tcm2.ko nt38771_touch.ko speed_touch.ko"
 #BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules.load))
-TW_LOAD_VENDOR_BOOT_MODULES := true
+#TW_LOAD_VENDOR_BOOT_MODULES := true
 TW_BRIGHTNESS_PATH := "/sys/devices/platform/soc/ae00000.qcom,mdss_mdp/backlight/panel0-backlight/brightness"
 TW_INCLUDE_RESETPROP := true
+TW_DEFAULT_BRIGHTNESS := 420
 
 # TWRP Debug Flags
 TARGET_USES_LOGD := true
